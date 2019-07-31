@@ -1,0 +1,6 @@
+UP = increase speed 0.1
+DOWN = decrease speed 0.1
+LEFT = adjust heading left 15°
+RIGHT = adjust heading right 15°
+S = stop droid (brings speed to 0)
+ESC = quit drive mode
