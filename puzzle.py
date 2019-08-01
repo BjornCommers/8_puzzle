@@ -1,6 +1,5 @@
 import copy
 import random
-import math
 
 
 class Puzzle(object):
@@ -22,7 +21,7 @@ class Puzzle(object):
     def is_legal_move(self, x, y):
         if x < 0 or x >= self.size or y < 0 or y >= self.size:
             return False
-        if math.abs((self.blank[0] - x) + (self.blank[1] -y)) != 1:
+        if abs((self.blank[0] - x) + (self.blank[1] -y)) != 1:
             return False
         return True
 
