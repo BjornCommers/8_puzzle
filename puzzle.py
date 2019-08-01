@@ -59,11 +59,13 @@ class Puzzle(object):
             for j in range(i+1, len(numbers)):
                 if number > numbers[j]:
                     inversions += 1
-        if self.size % 2 == 0:
-            inversions += self.blank[0]
-        if inversions % 2 == 0:
-            return True
-        return False
+        if self.size % 2 == 1:
+            if inversions % 2 == 0:
+                return True
+            return False
+        else:
+            # figure out
+            return False
 
     def copy(self):
         return Puzzle(copy.deepcopy(self.board))
@@ -91,20 +93,19 @@ class Puzzle(object):
         return tuple([tuple(i) for i in self.board])
 
     def find_solution(self):
-        if self.is_solvable():
-            frontier = []
-            heapq.heappush(frontier, (self.heuristic_fn(), [], self))
-            explored = {self.board_tuple(): 0}
-            while frontier:
-                f, path, game = heapq.heappop(frontier)
-                if game.is_solved():
-                    return path
-                for next_move, next_game in game.successors():
-                    fn = len(path) + next_game.heuristic_fn()
-                    if next_game.board_tuple() not in explored:
-                        next_path = update_path(next_move, path)
-                        explored[next_game.board_tuple()] = fn
-                        heapq.heappush(frontier, (fn, next_path, next_game))
+        frontier = []
+        heapq.heappush(frontier, (self.heuristic_fn(), [], self))
+        explored = {self.board_tuple(): 0}
+        while frontier:
+            f, path, game = heapq.heappop(frontier)
+            if game.is_solved():
+                return path
+            for next_move, next_game in game.successors():
+                fn = len(path) + next_game.heuristic_fn()
+                if next_game.board_tuple() not in explored:
+                    next_path = update_path(next_move, path)
+                    explored[next_game.board_tuple()] = fn
+                    heapq.heappush(frontier, (fn, next_path, next_game))
         return None
 
 
