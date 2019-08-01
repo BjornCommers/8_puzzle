@@ -9,7 +9,10 @@ class Puzzle(object):
     def __init__(self, board):
         self.board = board
         self.size = len(board)
-        self.blank = (0, 0)
+        for i in range(self.size):
+            for j in range(self.size):
+                if self.board[i][j] == 0:
+                    self.blank = (i, j)
 
     def get_board(self):
         return self.board
@@ -70,29 +73,32 @@ class Puzzle(object):
         col = value % self.size
         return abs(row - x) + abs(col - y)
 
-    def update_path(self, point, path):
-        new_path = copy.deepcopy(path)
-        new_path.append(point)
-        return new_path
+    def board_tuple(self):
+        return tuple([tuple(i) for i in self.board])
 
     def find_solution(self):
         frontier = []
-        heapq.heappush(frontier, (heuristic(start, goal), 0, start, [start]))
-        explored = {start: 0}
+        heapq.heappush(frontier, (self.heuristic_fn(), [], self))
+        explored = {self.board_tuple(): 0}
         while frontier:
-            f_dist, g_dist, point, path = heapq.heappop(frontier)
-            if point == goal:
+            f, path, game = heapq.heappop(frontier)
+            if game.is_solved():
                 return path
-            for next_point in get_successors(point, scene):
-                gd = g_dist + heuristic(point, next_point)
-                if next_point not in explored or explored[next_point] > gd:
-                    next_path = update_path(next_point, path)
-                    explored[next_point] = gd
-                    heapq.heappush(frontier, (gd + heuristic(next_point, goal), gd, next_point, next_path))
+            for next_move, next_game in game.successors():
+                fn = len(path) + next_game.heuristic_fn()
+                if next_game.board_tuple() not in explored or explored[next_game.board_tuple()] > fn:
+                    next_path = update_path(next_move, path)
+                    explored[next_game.board_tuple()] = fn
+                    heapq.heappush(frontier, (fn, next_path, next_game))
         return None
+
+
+def update_path(point, path):
+    new_path = copy.deepcopy(path)
+    new_path.append(point)
+    return new_path
 
 
 def create_puzzle(size):
     board = [[j + (size*i) for j in range(size)] for i in range(size)]
     return Puzzle(board)
-
