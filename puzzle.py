@@ -1,5 +1,7 @@
 import copy
 import random
+import math
+import heapq
 
 
 class Puzzle(object):
@@ -21,7 +23,7 @@ class Puzzle(object):
     def is_legal_move(self, x, y):
         if x < 0 or x >= self.size or y < 0 or y >= self.size:
             return False
-        if abs((self.blank[0] - x) + (self.blank[1] -y)) != 1:
+        if abs(self.blank[0] - x) + abs(self.blank[1] - y) != 1:
             return False
         return True
 
@@ -54,6 +56,19 @@ class Puzzle(object):
             game = self.copy()
             game.perform_move(x, y)
             yield (x, y), game
+
+    def heuristic_fn(self):
+        total = 0
+        for i in range(self.size):
+            for j in range(self.size):
+                total += self.manhattan_dist(i, j)
+        return total
+
+    def manhattan_dist(self, x, y):
+        value = self.board[x][y]
+        row = math.floor(value/self.size)
+        col = value % self.size
+        return abs(row - x) + abs(col - y)
 
     def find_solution(self):
         pass
