@@ -51,6 +51,7 @@ class Puzzle(object):
             return True
         return False
 
+    # logic from https://www.cs.princeton.edu/courses/archive/fall12/cos226/assignments/8puzzle.html
     def is_solvable(self):
         inversions = 0
         numbers = [self.board[i][j] for i in range(self.size) for j in range(self.size) if self.board[i][j] != 0]
@@ -58,6 +59,8 @@ class Puzzle(object):
             for j in range(i+1, len(numbers)):
                 if number > numbers[j]:
                     inversions += 1
+        if self.size % 2 == 0:
+            inversions += self.blank[0]
         if inversions % 2 == 0:
             return True
         return False
