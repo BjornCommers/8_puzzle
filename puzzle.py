@@ -52,9 +52,9 @@ class Puzzle(object):
 
     def successors(self):
         for x, y in self.legal_moves():
-            next = self.copy()
-            next.perform_move(x, y)
-            yield (x, y), next
+            game = self.copy()
+            game.perform_move(x, y)
+            yield (x, y), game
 
     def find_solution(self):
         pass
@@ -63,3 +63,4 @@ class Puzzle(object):
 def create_puzzle(size):
     board = [[j + (size*i) for j in range(size)] for i in range(size)]
     return Puzzle(board)
+
