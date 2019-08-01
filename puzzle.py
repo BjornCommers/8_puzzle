@@ -70,8 +70,26 @@ class Puzzle(object):
         col = value % self.size
         return abs(row - x) + abs(col - y)
 
+    def update_path(self, point, path):
+        new_path = copy.deepcopy(path)
+        new_path.append(point)
+        return new_path
+
     def find_solution(self):
-        pass
+        frontier = []
+        heapq.heappush(frontier, (heuristic(start, goal), 0, start, [start]))
+        explored = {start: 0}
+        while frontier:
+            f_dist, g_dist, point, path = heapq.heappop(frontier)
+            if point == goal:
+                return path
+            for next_point in get_successors(point, scene):
+                gd = g_dist + heuristic(point, next_point)
+                if next_point not in explored or explored[next_point] > gd:
+                    next_path = update_path(next_point, path)
+                    explored[next_point] = gd
+                    heapq.heappush(frontier, (gd + heuristic(next_point, goal), gd, next_point, next_path))
+        return None
 
 
 def create_puzzle(size):
