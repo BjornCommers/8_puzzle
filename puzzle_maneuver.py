@@ -1,16 +1,25 @@
 import math
 
 
-def perform_moves(moves, droid_board, blank):
+def perform_moves(droid_board, moves, blank, speed, scale_dist=1):
     for move in moves:
+
+        # get droid in move
         droid = droid_board[move[0]][move[1]]
-        perform_move(droid, move, blank)
+
+        # calculate dist/ang into blank space
+        dist, ang = compute_roll_parameters(old_pos, new_pos)
+
+        # roll
+        rolled = roll(droid, speed, ang, dist * scale_dist)
+        if not rolled:
+            print('Something went wrong.')
+            return False
+
+        # update board
+        droid_board[move[0]][move[1]] = None
+        droid_board[blank[0]][blank[1]] = droid_board
         blank = move  # update new blank space
-
-
-def perform_move(droid, old_pos, new_pos):
-    dist, ang = compute_roll_parameters(old_pos, new_pos)
-    roll(droid, 2, ang, time)
 
 
 # copied from joe's code

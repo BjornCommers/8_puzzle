@@ -28,4 +28,5 @@ for row in start_board:
     droid_board.append(new_row)
 
 # droids play out puzzle
-puzzle_maneuver.perform_moves(moves, droid_board, blank)
+speed = 0x88  # half speed?
+puzzle_maneuver.perform_moves(droid_board, moves, blank, speed, dist_constant = .75)
