@@ -2,9 +2,9 @@ from puzzle import Puzzle
 from client import DroidClient
 import puzzle_maneuver
 
-# start droids
-droid_names = {1: 'D2-579a', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: ''}
-droids = {}
+# assign droids to a number and start all droids
+droid_names = {1: 'D2-579A', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: ''}
+droids = {} # num: droid client
 
 for num, droid_name in droid_names:
     droid = DroidClient()
@@ -13,9 +13,19 @@ for num, droid_name in droid_names:
     droids[num] = droid
 
 # create puzzle and find solution to puzzle
-start_board = []
+start_board = [[3, 7, 1], [6, 4, 2], [0, 8, 5]]
 puzzle = Puzzle(start_board)
-solution = puzzle.find_solution()
+blank = puzzle.blank
+moves = puzzle.find_solution()
+
+# set up droids in grid
+droid_board = []
+for row in start_board:
+    new_row = []
+    for num in row:
+        if num != 0:
+            new_row.append(droids[num])
+    droid_board.append(new_row)
 
 # droids play out puzzle
-puzzle_maneuver.play_moves(droids, solution)
+puzzle_maneuver.perform_moves(moves, droid_board, blank)

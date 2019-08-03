@@ -1,11 +1,22 @@
 import math
 
-def play_moves(droids, maneuver):
-    pass
+
+def perform_moves(moves, droid_board, blank):
+    for move in moves:
+        droid = droid_board[move[0]][move[1]]
+        perform_move(droid, move, blank)
+        blank = move  # update new blank space
+
+
+def perform_move(droid, old_pos, new_pos):
+    dist, ang = compute_roll_parameters(old_pos, new_pos)
+    roll(droid, 2, ang, time)
+
 
 # copied from joe's code
 def roll(sphero, speed, ang, time):
     return sphero.roll(speed, ang, time)
+
 
 # copied from joe's code
 def compute_roll_parameters(old_pos, new_pos):
@@ -18,3 +29,4 @@ def compute_roll_parameters(old_pos, new_pos):
     ang = 90 - math.atan2(d_y, d_x) * (180/math.pi)
 
     return dist, ang
+
