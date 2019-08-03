@@ -8,7 +8,7 @@ def perform_moves(droid_board, moves, blank, speed, scale_dist=1):
         droid = droid_board[move[0]][move[1]]
 
         # calculate dist/ang into blank space
-        dist, ang = compute_roll_parameters(old_pos, new_pos)
+        dist, ang = compute_roll_parameters(move, blank)
 
         # roll
         rolled = roll(droid, speed, ang, dist * scale_dist)
@@ -18,7 +18,7 @@ def perform_moves(droid_board, moves, blank, speed, scale_dist=1):
 
         # update board
         droid_board[move[0]][move[1]] = None
-        droid_board[blank[0]][blank[1]] = droid_board
+        droid_board[blank[0]][blank[1]] = droid
         blank = move  # update new blank space
 
 

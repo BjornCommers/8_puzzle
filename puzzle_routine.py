@@ -3,7 +3,7 @@ from client import DroidClient
 import puzzle_maneuver
 
 # assign droids to a number and start all droids
-droid_names = {1: 'D2-579A', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: ''}
+droid_names = {1: 'D2-579A', 2: 'Q5-E3D3', 3: 'D2-0969', 4: 'Q5-240E', 5: 'D2-1C62', 6: 'Q5-B30E', 7: 'RongRong', 8: 'Q5-D8D3'}
 droids = {} # num: droid client
 
 for num, droid_name in droid_names:
