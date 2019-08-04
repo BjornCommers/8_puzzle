@@ -1,4 +1,5 @@
 import math
+import time
 
 
 def perform_moves(droid_board, moves, blank, speed, scale_dist=1):
@@ -7,20 +8,33 @@ def perform_moves(droid_board, moves, blank, speed, scale_dist=1):
         # get droid in move
         droid = droid_board[move[0]][move[1]]
 
-        # calculate dist/ang into blank space
-        dist, ang = compute_roll_parameters(move, blank)
+        path = [move, blank]
 
-        # roll
-        rolled = roll(droid, speed, ang, dist * scale_dist)
-        if not rolled:
-            print('Something went wrong.')
-            return False
+        follow_path(droid, path, speed, .75)
+        time.sleep(5)
 
         # update board
         droid_board[move[0]][move[1]] = None
         droid_board[blank[0]][blank[1]] = droid
         blank = move  # update new blank space
 
+
+def follow_path(sphero, path, speed, scale_dist=1):
+
+    cur_pos = path[0]
+    for next_pos in path[1:]:
+
+        # compute distance and angle to next position
+        print('%s -> %s' % (cur_pos, next_pos))
+        dist, ang = compute_roll_parameters(cur_pos, next_pos)
+        rolled = roll(sphero, speed, ang, dist*scale_dist)
+        if not rolled:
+            print('Something went wrong.')
+            return False
+
+        cur_pos = next_pos
+    print('Path complete.')
+    return True
 
 # copied from joe's code
 def roll(sphero, speed, ang, time):
